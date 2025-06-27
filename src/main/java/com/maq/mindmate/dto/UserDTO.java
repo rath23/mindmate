@@ -1,0 +1,32 @@
+package com.maq.mindmate.dto;
+
+import java.time.LocalDateTime;
+
+import lombok.*;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class UserDTO {
+    private String email;
+
+    @Setter(AccessLevel.NONE)
+    private String password;
+
+    private String userName;
+
+    private String name;
+
+    private String nickName;
+
+    private Boolean anonymousMode;
+
+    private Boolean reminderEnabled;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime lastLogin;
+
+    private Boolean isDeleted;
+}
