@@ -22,29 +22,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping
-    public String test(){
-        return  "Hello";
-    }
 
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser() {
         UserDetails currentUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
          UserDTO response = userService.getCurrentUserInfo(currentUser);
-
-//
-//        UserDTO response = UserDTO.builder()
-//                .email(currentUser.getEmail())
-//                .userName(currentUser.getUserName())
-//                .name(currentUser.getName())
-//                .nickName(currentUser.getNickName())
-//                .anonymousMode(currentUser.getAnonymousMode())
-//                .reminderEnabled(currentUser.getReminderEnabled())
-//                .createdAt(currentUser.getCreatedAt())
-//                .lastLogin(currentUser.getLastLogin())
-//                .isDeleted(currentUser.getIsDeleted())
-//                .build();
-
         return ResponseEntity.ok(response);
     }
 

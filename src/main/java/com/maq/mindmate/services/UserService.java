@@ -33,4 +33,9 @@ public class UserService {
 
         return response;
     }
+    public User getUser(UserDetails userDetails){
+        String username = userDetails.getUsername();
+        User currentUser = userRepo.findByUserName(username);
+        return currentUser;
+    }
 }
