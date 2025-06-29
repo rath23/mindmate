@@ -2,10 +2,7 @@ package com.maq.mindmate.services;
 
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 import javax.crypto.KeyGenerator;
@@ -21,6 +18,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 @Service
 public class JWTService {
@@ -117,5 +118,26 @@ public class JWTService {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
+
+    public boolean validateTokenForWebSockets(String token) {
+        try {
+            Claims claims = extractAllClaims(token);
+            return !isTokenExpired(token);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public Authentication getAuthentication(String token) {
+        String username = extractUsername(token);
+
+        // Optional: You can load actual roles from DB if needed
+        return new UsernamePasswordAuthenticationToken(
+                username,
+                null,
+                List.of(new SimpleGrantedAuthority("USER")) // default role
+        );
+    }
+
 }
 

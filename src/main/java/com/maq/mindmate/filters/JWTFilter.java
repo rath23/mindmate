@@ -1,4 +1,4 @@
-package com.maq.mindmate.configuration;
+package com.maq.mindmate.filters;
 
 import java.io.IOException;
 

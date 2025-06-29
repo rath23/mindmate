@@ -1,6 +1,7 @@
 package com.maq.mindmate.dto;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import lombok.*;
 
@@ -9,6 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class UserDTO {
+    private UUID id;
     private String email;
 
     @Setter(AccessLevel.NONE)

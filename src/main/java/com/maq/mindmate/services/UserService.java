@@ -20,6 +20,7 @@ public class UserService {
         User currentUser = userRepo.findByUserName(username); // use the service method here
 
         UserDTO response = UserDTO.builder()
+                .id(currentUser.getId())
                 .email(currentUser.getEmail())
                 .userName(currentUser.getUserName())
                 .name(currentUser.getName())
