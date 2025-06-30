@@ -45,10 +45,10 @@ public class AppConfig {
             .csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
             .authorizeHttpRequests(request -> request
-                        .requestMatchers("/auth/user/register", "/auth/user/login").permitAll()
+                        .requestMatchers("/auth/user/register", "/auth/user/login","/ws-chat/**").permitAll()
                     .anyRequest().authenticated())
             //.formLogin(Customizer.withDefaults())
-            .httpBasic(Customizer.withDefaults())
+//            .httpBasic(Customizer.withDefaults())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
