@@ -1,8 +1,8 @@
 package com.maq.mindmate.controllers;
 
 import com.maq.mindmate.dto.UserDTO;
-import com.maq.mindmate.services.SelfCareAIService;
-import com.maq.mindmate.services.UserService;
+import com.maq.mindmate.models.User;
+import com.maq.mindmate.services.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,9 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 
 @RestController
@@ -24,8 +24,16 @@ public class UserController {
     private UserService userService;
 
     @Autowired
+    private XPTrackingService xpTrackingService;
+
+    @Autowired
     private SelfCareAIService selfCareAIService;
 
+    @Autowired
+    private  final GeminiTaskService geminiTaskService;
+
+    @Autowired
+    private HomeService homeService;
 
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser() {
@@ -38,6 +46,25 @@ public class UserController {
     public ResponseEntity<?> getAISuggestions(Authentication authentication) {
         return selfCareAIService.getAISuggestions(authentication);
     }
+
+     @GetMapping("/progress")
+    public  ResponseEntity<?> UserProgress (Authentication authentication){
+        return ResponseEntity.ok().body(xpTrackingService.getUserProgress(authentication));
+     }
+
+     @PostMapping("/task-completed/{taskId}")
+    public ResponseEntity<?> userTaskCompleted(@PathVariable Long taskId , Authentication authentication){
+       User user = userService.getCurrentUserDetailWithAuth(authentication);
+       geminiTaskService.markTaskComplete(taskId,user);
+        return ResponseEntity.ok().body(Map.of("message", "Done Updating"));
+
+     }
+
+     @GetMapping("/home")
+    public ResponseEntity<?> homeScreenDataFetch(Authentication authentication){
+         User user = userService.getCurrentUserDetailWithAuth(authentication);
+         return homeService.getHomeData(user);
+     }
 
 }
 

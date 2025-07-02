@@ -5,8 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maq.mindmate.dto.MoodEntryRequest;
-import com.maq.mindmate.models.MoodEntry;
-import com.maq.mindmate.models.User;
+
 import lombok.RequiredArgsConstructor;
 
 
@@ -14,8 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;

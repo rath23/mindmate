@@ -1,0 +1,20 @@
+<ehcache>
+    <diskStore path="java.io.tmpdir"/>
+
+    <defaultCache
+            maxElementsInMemory="10000"
+            eternal="false"
+            timeToIdleSeconds="300"
+            timeToLiveSeconds="600"
+            overflowToDisk="true"
+    />
+
+    <!-- Custom cache for User entity -->
+    <cache name="com.example.model.User"
+           maxElementsInMemory="500"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="7200"
+           overflowToDisk="false"
+           memoryStoreEvictionPolicy="LRU"/>
+</ehcache>

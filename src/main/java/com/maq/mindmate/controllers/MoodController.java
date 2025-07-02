@@ -1,5 +1,6 @@
 package com.maq.mindmate.controllers;
 
+import com.maq.mindmate.dto.MoodAnalyticsResponse;
 import com.maq.mindmate.dto.MoodEntryRequest;
 import com.maq.mindmate.models.MoodEntry;
 
@@ -32,7 +33,11 @@ public class MoodController {
 
     @GetMapping("/history")
     public ResponseEntity<?> getMoodHistory(Authentication authentication) {
-        System.out.println("before return");
         return ResponseEntity.ok(moodService.getMoodHistory(authentication));
     }
+    @GetMapping("/analytics")
+    public ResponseEntity<?> getMoodAnalytics(Authentication authentication) {
+        return ResponseEntity.ok(moodService.analyzeMoodData(authentication));
+    }
+
 }

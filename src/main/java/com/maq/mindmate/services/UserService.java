@@ -5,6 +5,8 @@ import com.maq.mindmate.models.User;
 import com.maq.mindmate.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -38,5 +40,11 @@ public class UserService {
         String username = userDetails.getUsername();
         User currentUser = userRepo.findByUserName(username);
         return currentUser;
+    }
+
+    public User getCurrentUserDetailWithAuth( Authentication authentication){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = getUser(userDetails);
+        return  user;
     }
 }
