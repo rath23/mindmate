@@ -3,6 +3,7 @@ package com.maq.mindmate.dto;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import jakarta.persistence.Column;
 import lombok.*;
 
 @Data
@@ -25,6 +26,9 @@ public class UserDTO {
     private Boolean anonymousMode;
 
     private Boolean reminderEnabled;
+
+
+    private Boolean notificationsEnabled;
 
     private LocalDateTime createdAt;
 

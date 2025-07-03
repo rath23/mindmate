@@ -36,5 +36,8 @@ public class User {
 
     private LocalDateTime lastLogin;
 
+    @Column(name = "notifications_enabled")
+    private Boolean notificationsEnabled = false;
+
     private Boolean isDeleted;
 }

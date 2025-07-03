@@ -33,8 +33,7 @@ public class MoodService {
     private final UserService userService;
 
 
-    public MoodEntry saveMoodEntry(MoodEntryRequest request, Authentication authentication) {
-        User user = userService.getCurrentUserDetailWithAuth(authentication);
+    public MoodEntry saveMoodEntry(MoodEntryRequest request, User user) {
         MoodEntry moodEntry = new MoodEntry();
         moodEntry.setMood(request.getMood());
         moodEntry.setTags(request.getTags());
@@ -45,9 +44,7 @@ public class MoodService {
         return moodEntryRepository.save(moodEntry);
     }
 
-    public List<MoodEntryRequest> getMoodHistory(Authentication authentication) {
-        User user = userService.getCurrentUserDetailWithAuth(authentication);
-
+    public List<MoodEntryRequest> getMoodHistory(User user) {
         List<MoodEntry> entries = moodEntryRepository.findAllByUserIdOrderByCreatedAtDesc(user.getId());
 
         return entries.stream()
@@ -67,8 +64,7 @@ public class MoodService {
 
     }
 
-    public MoodAnalyticsResponse analyzeMoodData(Authentication authentication) {
-        User user = userService.getCurrentUserDetailWithAuth(authentication);
+    public MoodAnalyticsResponse analyzeMoodData(User user) {
         List<MoodEntry> entries = moodEntryRepository.findAllByUserIdOrderByCreatedAtDesc(user.getId());
 
         // Mood count map

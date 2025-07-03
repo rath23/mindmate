@@ -8,10 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -44,7 +46,9 @@ public class UserController {
 
     @GetMapping("/ai-suggest")
     public ResponseEntity<?> getAISuggestions(Authentication authentication) {
-        return selfCareAIService.getAISuggestions(authentication);
+        User user = userService.getCurrentUserDetailWithAuth(authentication);
+        List<Map<String, String>> suggestions;
+        return selfCareAIService.getAISuggestions(user);
     }
 
      @GetMapping("/progress")
@@ -65,6 +69,11 @@ public class UserController {
          User user = userService.getCurrentUserDetailWithAuth(authentication);
          return homeService.getHomeData(user);
      }
+
+    @PutMapping("/update-profile")
+    public ResponseEntity<?> updateProfile(@RequestBody UserDTO dto, @AuthenticationPrincipal UserDetails userDetails) {
+        return userService.updateUserInfo(dto, userDetails);
+    }
 
 }
 

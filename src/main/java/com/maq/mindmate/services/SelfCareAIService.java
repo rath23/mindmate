@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maq.mindmate.dto.MoodEntryRequest;
 
+import com.maq.mindmate.models.User;
 import lombok.RequiredArgsConstructor;
 
 
@@ -168,8 +169,8 @@ public class SelfCareAIService {
 
 
 
-    public ResponseEntity<?> getAISuggestions(Authentication authentication) {
-        List<MoodEntryRequest> recent = moodService.getMoodHistory(authentication).stream().limit(5).toList();
+    public ResponseEntity<?> getAISuggestions(User user) {
+        List<MoodEntryRequest> recent = moodService.getMoodHistory(user).stream().limit(5).toList();
 
         if (recent.isEmpty()) {
             return ResponseEntity.badRequest().body("Please submit a mood first.");

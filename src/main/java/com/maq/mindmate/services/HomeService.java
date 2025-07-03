@@ -11,6 +11,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -21,6 +24,9 @@ public class HomeService {
 
     @Autowired
     private  MoodEntryRepository moodEntryRepo;
+
+    @Autowired
+    private SelfCareAIService selfCareAIService;
 
 
 
@@ -39,7 +45,22 @@ public class HomeService {
 
         MoodType todayMood = todayEntryOpt.map(MoodEntry::getMood).orElse(null);
 
+        ResponseEntity<?> aiResponse = selfCareAIService.getAISuggestions(user);
+        List<Map<String, String>> suggestions = new ArrayList<>();
 
-        return ResponseEntity.ok(new HomeDTO(xp, streak, todayMood));
+        if (aiResponse.getStatusCode().is2xxSuccessful() && aiResponse.getBody() instanceof Map) {
+            Map<?, ?> bodyMap = (Map<?, ?>) aiResponse.getBody();
+            Object suggestionsObj = bodyMap.get("suggestions");
+            if (suggestionsObj instanceof List<?>) {
+                for (Object item : (List<?>) suggestionsObj) {
+                    if (item instanceof Map<?, ?>) {
+                        suggestions.add((Map<String, String>) item);
+                    }
+                }
+            }
+        }
+
+
+        return ResponseEntity.ok(new HomeDTO(xp, streak, todayMood,suggestions));
     }
 }
