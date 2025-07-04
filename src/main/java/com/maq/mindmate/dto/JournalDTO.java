@@ -17,10 +17,10 @@ public class JournalDTO {
     @Size(max = 150, message = "Heading must not exceed 150 characters")
     private String heading;
 
-    @PastOrPresent(message = "Created time cannot be in the future")
+//    @PastOrPresent(message = "Created time cannot be in the future")
     private LocalDateTime createdAt;
 
-    @PastOrPresent(message = "Updated time cannot be in the future")
+//    @PastOrPresent(message = "Updated time cannot be in the future")
     private LocalDateTime updatedAt;
 
     @NotBlank(message = "Body is required")

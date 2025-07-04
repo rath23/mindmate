@@ -28,6 +28,6 @@ public class MoodEntryRequest {
     private String note;
 
     // Optional: ensure createdAt is not a future date
-    @PastOrPresent(message = "Created date cannot be in the future")
+//    @PastOrPresent(message = "Created date cannot be in the future")
     private LocalDateTime createdAt;
 }

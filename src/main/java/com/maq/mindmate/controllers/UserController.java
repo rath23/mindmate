@@ -1,5 +1,6 @@
 package com.maq.mindmate.controllers;
 
+import com.maq.mindmate.dto.UpdateUserDto;
 import com.maq.mindmate.dto.UserDTO;
 import com.maq.mindmate.models.User;
 import com.maq.mindmate.services.*;
@@ -72,7 +73,7 @@ public class UserController {
      }
 
     @PutMapping("/update-profile")
-    public ResponseEntity<?> updateProfile(@Valid @RequestBody UserDTO dto, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<?> updateProfile(@Valid @RequestBody UpdateUserDto dto, @AuthenticationPrincipal UserDetails userDetails) {
         return userService.updateUserInfo(dto, userDetails);
     }
 
