@@ -1,6 +1,7 @@
 package com.maq.mindmate.services;
 
 import com.maq.mindmate.dto.BadgeDTO;
+import com.maq.mindmate.exceptions.BadgeNotFoundException;
 import com.maq.mindmate.models.*;
 import com.maq.mindmate.repository.BadgeRepository;
 import com.maq.mindmate.repository.JournalEntryRepository;
@@ -31,7 +32,6 @@ public class BadgeService {
         long journalCount = journalRepo.countByUserId(user.getId());
 
         int streak = calculateStreak(user);
-
         // Badge conditions
         unlock("Mood Rookie", user, moods.size() >= 1);
         unlock("Streak Starter", user, streak >= 3);
@@ -75,7 +75,7 @@ public class BadgeService {
         if (!condition) return;
         Badges badge = badgeRepo.findByName(badgeName);
         if (badge == null) {
-            throw new EntityNotFoundException("Badge not found: " + badgeName);
+            throw new BadgeNotFoundException(badgeName);
         }
         if (!userBadgeRepo.existsByUserAndBadge(user, badge)) {
             userBadgeRepo.save(new UserBadge(null, user, badge, LocalDate.now()));

@@ -1,5 +1,6 @@
 package com.maq.mindmate.services;
 
+import com.maq.mindmate.exceptions.TaskNotFoundException;
 import com.maq.mindmate.models.DailyTask;
 import com.maq.mindmate.models.User;
 import com.maq.mindmate.repository.DailyTaskRepository;
@@ -37,7 +38,7 @@ public class GeminiTaskService {
     public void markTaskComplete(Long taskId, User user) {
         DailyTask task = dailyTaskRepo.findById(taskId)
                 .filter(t -> t.getUser().getId().equals(user.getId()))
-                .orElseThrow(() -> new RuntimeException("Task not found"));
+                .orElseThrow(() -> new TaskNotFoundException(taskId));
         task.setCompleted(true);
         dailyTaskRepo.save(task);
     }

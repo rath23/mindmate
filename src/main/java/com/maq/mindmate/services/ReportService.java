@@ -1,5 +1,7 @@
 package com.maq.mindmate.services;
 
+import com.maq.mindmate.exceptions.BlockDurationExceededException;
+import com.maq.mindmate.exceptions.SelfReportingException;
 import com.maq.mindmate.models.BlockedUser;
 import com.maq.mindmate.models.UserReport;
 import com.maq.mindmate.repository.BlockedUserRepository;
@@ -18,12 +20,16 @@ public class ReportService {
     private final UserReportRepository reportRepository;
     @Autowired
     private final BlockedUserRepository blockedUserRepository;
-    private static final int[] BLOCK_DURATIONS = {2, 6, 10, -1}; // Days (-1 = permanent)
+    private static final int[] BLOCK_DURATIONS = {2, 6, 10, -1};
 
     @Transactional
     public void handleReport(String reporter, String reported, String room) {
         // Save report
         UserReport report = new UserReport();
+        if (reporter.equalsIgnoreCase(reported)) {
+            throw new SelfReportingException("Users cannot report themselves.");
+        }
+
         report.setReporterNickname(reporter);
         report.setReportedNickname(reported);
         report.setRoom(room);
@@ -37,7 +43,10 @@ public class ReportService {
     }
 
     private void applyBlock(String nickname, String room, int violationLevel) {
-        if (violationLevel > BLOCK_DURATIONS.length) return;
+
+        if (violationLevel > BLOCK_DURATIONS.length) {
+            throw new BlockDurationExceededException("Violation level exceeds defined limits.");
+        }
 
         BlockedUser block = blockedUserRepository.findByNicknameAndRoom(nickname, room)
                 .orElse(new BlockedUser());

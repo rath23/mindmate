@@ -16,7 +16,7 @@ public class DailyTaskScheduler {
     private final GeminiTaskService taskService;
 
         @Scheduled(cron = "0 0 0 * * *") // every midnight
-public void generateDailyTasks() {
+        public void generateDailyTasks() {
         List<User> users = userRepository.findAll();
         users.forEach(taskService::generateTasksIfNotExist);
     }

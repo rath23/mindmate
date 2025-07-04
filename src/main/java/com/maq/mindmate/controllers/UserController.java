@@ -3,6 +3,7 @@ package com.maq.mindmate.controllers;
 import com.maq.mindmate.dto.UserDTO;
 import com.maq.mindmate.models.User;
 import com.maq.mindmate.services.*;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -71,7 +72,7 @@ public class UserController {
      }
 
     @PutMapping("/update-profile")
-    public ResponseEntity<?> updateProfile(@RequestBody UserDTO dto, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<?> updateProfile(@Valid @RequestBody UserDTO dto, @AuthenticationPrincipal UserDetails userDetails) {
         return userService.updateUserInfo(dto, userDetails);
     }
 

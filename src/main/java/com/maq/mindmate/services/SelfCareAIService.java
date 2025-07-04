@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maq.mindmate.dto.MoodEntryRequest;
 
+import com.maq.mindmate.exceptions.GeminiAPIException;
+import com.maq.mindmate.exceptions.JsonParsingException;
 import com.maq.mindmate.models.User;
 import lombok.RequiredArgsConstructor;
 
@@ -131,7 +133,7 @@ public class SelfCareAIService {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 200) {
-            throw new RuntimeException("Gemini API error: " + response.body());
+            throw new GeminiAPIException("Gemini API error: " + response.body());
         }
 
         JsonNode root = objectMapper.readTree(response.body());
@@ -161,9 +163,9 @@ public class SelfCareAIService {
             JsonNode suggestions = node.get("suggestions");
             return objectMapper.convertValue(suggestions, new TypeReference<>() {});
         } catch (JsonProcessingException e) {
-            System.err.println("Failed to parse JSON response: " + json);
-            throw e;
+            throw new JsonParsingException("Failed to parse suggestions JSON", e);
         }
+
     }
 
 

@@ -1,5 +1,7 @@
 package com.maq.mindmate.services;
 
+import com.maq.mindmate.exceptions.BadWordsFileLoadException;
+import com.maq.mindmate.exceptions.EmptyBadWordListException;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
@@ -8,7 +10,6 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
@@ -19,6 +20,9 @@ public class ModerationService {
 
     public ModerationService() {
         loadBadWordsFromFile("badwords.txt");
+        if (badWords.isEmpty()) {
+            throw new EmptyBadWordListException();
+        }
     }
 
     private void loadBadWordsFromFile(String filename) {
@@ -31,7 +35,7 @@ public class ModerationService {
                         .forEach(this::addBadWord);
             }
         } catch (Exception e) {
-            System.err.println("Failed to load bad words from file: " + e.getMessage());
+            throw new BadWordsFileLoadException("Failed to load bad words from file: " + filename, e);
         }
     }
 

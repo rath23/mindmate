@@ -8,11 +8,16 @@ import org.springframework.stereotype.Service;
 
 import com.maq.mindmate.models.User;
 import com.maq.mindmate.repository.UserRepo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
 @Service
 public class MyUserDetailsService implements UserDetailsService {
+
+    private static final Logger logger = LoggerFactory.getLogger(MyUserDetailsService.class);
+
 
     @Autowired
     private UserRepo userRepo;
@@ -21,7 +26,7 @@ public class MyUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepo.findByUserName(username);
         if (user == null) {
-            System.out.println("User not found");
+            logger.warn("User not found with username: {}", username);
             throw new UsernameNotFoundException("User not found");
         }
         return new UserDetailsImpl(user);

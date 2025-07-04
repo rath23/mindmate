@@ -4,6 +4,7 @@ import com.maq.mindmate.dto.DailyMoodDTO;
 import com.maq.mindmate.dto.MoodAnalyticsResponse;
 import com.maq.mindmate.dto.MoodEntryRequest;
 import com.maq.mindmate.enums.MoodType;
+import com.maq.mindmate.exceptions.DuplicateMoodEntryException;
 import com.maq.mindmate.models.MoodEntry;
 import com.maq.mindmate.models.User;
 import com.maq.mindmate.repository.MoodEntryRepository;
@@ -34,6 +35,16 @@ public class MoodService {
 
 
     public MoodEntry saveMoodEntry(MoodEntryRequest request, User user) {
+        LocalDate today = LocalDate.now();
+        boolean alreadyExists = moodEntryRepository.existsByUserIdAndCreatedAtBetween(
+                user.getId(),
+                today.atStartOfDay(),
+                today.plusDays(1).atStartOfDay()
+        );
+        if (alreadyExists) {
+            throw new DuplicateMoodEntryException();
+        }
+
         MoodEntry moodEntry = new MoodEntry();
         moodEntry.setMood(request.getMood());
         moodEntry.setTags(request.getTags());
@@ -43,6 +54,7 @@ public class MoodService {
 
         return moodEntryRepository.save(moodEntry);
     }
+
 
     public List<MoodEntryRequest> getMoodHistory(User user) {
         List<MoodEntry> entries = moodEntryRepository.findAllByUserIdOrderByCreatedAtDesc(user.getId());

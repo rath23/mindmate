@@ -1,6 +1,7 @@
 package com.maq.mindmate.services;
 
 import com.maq.mindmate.dto.JournalDTO;
+import com.maq.mindmate.exceptions.JournalEntryNotFoundException;
 import com.maq.mindmate.models.JournalEntry;
 import com.maq.mindmate.models.User;
 import com.maq.mindmate.repository.JournalEntryRepository;
@@ -56,7 +57,8 @@ public class JournalService {
 
     public JournalDTO updateEntry(UUID id, JournalDTO request, User user) {
         JournalEntry entry = getEntry(id, user)
-                .orElseThrow(() -> new RuntimeException("Not found or unauthorized"));
+                .orElseThrow(() -> new JournalEntryNotFoundException("Entry not found for this user"));
+
 
         entry.setHeading(request.getHeading());
         entry.setUpdatedAt(LocalDateTime.now());
@@ -71,7 +73,7 @@ public class JournalService {
 
 
     public void deleteEntry(UUID id, User user) {
-        JournalEntry entry = getEntry(id, user).orElseThrow(() -> new RuntimeException("Not found or unauthorized"));
+        JournalEntry entry = getEntry(id, user).orElseThrow(() -> new JournalEntryNotFoundException("Entry not found for this user"));
         journalEntryRepository.delete(entry);
     }
 }

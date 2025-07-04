@@ -8,6 +8,7 @@ import com.maq.mindmate.models.User;
 import com.maq.mindmate.services.MoodService;
 
 import com.maq.mindmate.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ public class MoodController {
 
 
     @PostMapping
-    public ResponseEntity<?> checkInMood(@RequestBody MoodEntryRequest request, Authentication authentication) {
+    public ResponseEntity<?> checkInMood(@Valid @RequestBody MoodEntryRequest request, Authentication authentication) {
         User user = userService.getCurrentUserDetailWithAuth(authentication);
         MoodEntry saved = moodService.saveMoodEntry(request, user);
         return ResponseEntity.ok("Mood saved successfully at " + saved.getCreatedAt());

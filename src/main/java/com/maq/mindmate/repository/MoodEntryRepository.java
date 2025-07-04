@@ -18,5 +18,5 @@ public interface MoodEntryRepository extends JpaRepository<MoodEntry, UUID> {
     List<MoodEntry> findAllByUserId(UUID id);
     int countByUserId(UUID userId);
     Optional<MoodEntry> findFirstByUserIdAndCreatedAtBetween(UUID userId, LocalDateTime start, LocalDateTime end);
-
+    boolean existsByUserIdAndCreatedAtBetween(UUID userId, LocalDateTime start, LocalDateTime end);
 }

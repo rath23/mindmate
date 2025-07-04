@@ -3,6 +3,8 @@ package com.maq.mindmate.services;
 import java.time.LocalDateTime;
 
 
+import com.maq.mindmate.exceptions.UserAlreadyExistsException;
+import com.maq.mindmate.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,34 +30,33 @@ public class AuthService {
     }
 
     public void register(UserDTO user) {
-        User existingUser = userRepo.findByUserName(user.getUserName());
-        if (existingUser != null) {
-            throw new RuntimeException("User already exists");
+        if (userRepo.findByUserName(user.getUserName()) != null) {
+            throw new UserAlreadyExistsException("User with username '" + user.getUserName() + "' already exists.");
         }
-        User newUser = new User();
 
-        // BeanUtils.copyProperties(user, newUser);
+        User newUser = new User();
         newUser.setUserName(user.getUserName());
         newUser.setEmail(user.getEmail());
-        newUser.setAnonymousMode(false);   
+        newUser.setAnonymousMode(false);
         newUser.setIsDeleted(false);
         newUser.setCreatedAt(LocalDateTime.now());
         newUser.setPassword(encodePassword(user.getPassword()));
         newUser.setName(user.getName());
         newUser.setNickName(user.getNickName());
         newUser.setReminderEnabled(false);
+
         userRepo.save(newUser);
     }
 
+
     public void updateLastLogin(String userName) {
         User user = userRepo.findByUserName(userName);
-        if (user != null) {
-            user.setLastLogin(LocalDateTime.now());
-            userRepo.save(user);
-        
-        } else {
-            throw new RuntimeException("User not found");
+        if (user == null) {
+            throw new UserNotFoundException("User with username '" + userName + "' not found.");
         }
+
+        user.setLastLogin(LocalDateTime.now());
+        userRepo.save(user);
     }
 
 }

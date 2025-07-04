@@ -5,6 +5,7 @@ import com.maq.mindmate.models.User;
 import com.maq.mindmate.services.AuthService;
 import com.maq.mindmate.services.JournalService;
 import com.maq.mindmate.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class JournalController {
     private  final UserService userService;
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody JournalDTO request, Authentication auth) {
+    public ResponseEntity<?> create(@Valid @RequestBody JournalDTO request, Authentication auth) {
         User user = userService.getCurrentUserDetailWithAuth(auth);
         return journalService.createEntry(request, user);
     }
