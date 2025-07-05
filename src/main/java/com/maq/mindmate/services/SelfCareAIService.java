@@ -38,8 +38,6 @@ public class SelfCareAIService {
     @Autowired
     private UserService userService;
 
-    @Value("${openai.api.key}")
-    private String openAiKey;
 
     @Value("${gemini.api.key}")
     private String geminiKey;
