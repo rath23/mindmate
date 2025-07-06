@@ -51,4 +51,4 @@
 ### Steps
 1. Clone repo:
    ```bash
-   git clone https://github.com/yourusername/mindmate-backend.git
+   git clone https://github.com/rath23/mindmate.git
