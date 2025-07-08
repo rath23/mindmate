@@ -7,6 +7,8 @@
 
 **The AI-powered backend for MindMate**, a mental wellness app featuring mood tracking, journaling, gamification, and community support with intelligent task generation.
 
+**Frontend :** https://github.com/rath23/mindmate-app
+
 ---
 
 ## 🌟 Features
